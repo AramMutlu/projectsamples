@@ -1,0 +1,2 @@
+**TEMPLATE** You are highly encouraged to maintain as much knowledge about the subject matter as you can in this directory. Not only will this help your (future) team members gain an understanding, it is also a way to maintain a clear record of any activities you've been engaged in that do not have a direct deliverable result. Think: research, meetings (make sure to have someone take minutes), brainstorms, etc.
+

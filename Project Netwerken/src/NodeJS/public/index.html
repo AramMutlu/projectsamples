@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Client</title>
+	<link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body onload="initialize()">
+<div class="container">
+	<input type="text" placeholder="Enter message.." id="message" value="Test">
+	<div class="buttons">
+		<button id="send-message" onclick="sendMessage()">Send Message</button>
+		<select>
+			<option value="10">SOS</option>
+			<option value="11">Help</option>
+			<option value="12">Intel</option>
+			<option value="13">Activity</option>
+			<option value="14">Incident</option>
+			<option value="15">Command</option>
+			<option value="16">Status</option>
+			<option value="17">Request</option>
+			<option value="99">Delete Alarm</option>
+		</select>
+		<button id="p2p" onclick="chooseP2P()">P2P</button>
+		<button id="udp" onclick="chooseUDP()">UDP</button>
+	</div>
+	<div id="results"></div>
+</div>
+
+<script src="message.js"></script>
+<script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,27 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <style name="AppTheme" parent="Theme.AppCompat.Light">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
+        <item name="textInputStyle">@style/OutlinedBox</item>
+        <item name="android:actionMenuTextColor">@color/colorAccent</item>
+    </style>
+
+    <style name="OutlinedBox" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="boxStrokeColor">@drawable/outline_box</item><!--
+        <item name="hintTextColor">@color/icon</item>-->
+        <item name="android:textColor">@color/text</item>
+    </style>
+
+    <style name="Title" parent="AppTheme">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/text</item>
+    </style>
+
+    <style name="Subtitle" parent="AppTheme">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/textSecondary</item>
+    </style>
+
+</resources>

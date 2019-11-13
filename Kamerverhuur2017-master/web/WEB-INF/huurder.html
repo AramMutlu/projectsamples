@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Huurder</title>
+</head>
+<body>
+<form name = "TenantForm" method="post" action="./SearchRoomServlet">
+    Oppervlakte (in m2):<br>
+    <input type="number" name="surface"><br>
+    Maximale prijs (in euro's):<br>
+    <input type="number" name="maxprice"><br>
+    Locatie: <br>
+    <select name = "location">
+        <option value="Enschede">Enschede</option>
+        <option value="Hengelo">Hengelo</option>
+        <option value="Almelo">Almelo</option>
+    </select>
+    <input type="submit" value="Search"><br>
+</form>
+
+<form name="TenantForm" method="get" action="./ShowPersonsServlet">
+    <input type="submit" value="Bekijk gebruikers"><br>
+</form>
+
+<FORM METHOD='POST' ACTION='./LoginServlet'><INPUT TYPE='submit' name='extra' VALUE='logout'></FORM>
+
+</body>
+</html>

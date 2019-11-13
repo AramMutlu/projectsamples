@@ -1,0 +1,103 @@
+* {
+	outline: none;
+	font-family: "Arial", sans-serif;
+}
+
+body {
+	background-color: #EEEEEE;
+}
+
+.container {
+	margin: 40px auto 0 auto;
+	width: 80%;
+}
+
+input, button, #results {
+	margin-bottom: 10px;
+}
+
+input {
+	padding: 10px;
+	width: calc(100% - 20px - 4px);
+}
+
+.buttons {
+	display: grid;
+	grid-template-columns: auto min-content 50px 50px;
+	grid-gap: 10px;
+}
+
+button {
+	padding: 10px;
+	border: none;
+	background-color: #006699;
+	color: white;
+	cursor: pointer;
+}
+
+select {
+	max-height: 38px;
+}
+
+#p2p, #udp {
+	background-color: white;
+	color: black;
+	-webkit-box-shadow: 1px 1px 5px 0 rgba(179, 179, 179, 0.48);
+	-moz-box-shadow: 1px 1px 5px 0 rgba(179, 179, 179, 0.48);
+	box-shadow: 1px 1px 5px 0 rgba(179, 179, 179, 0.48);
+}
+
+.offline {
+	border-bottom: 3px solid #F44336;
+}
+
+.online {
+	border-bottom: 3px solid #4CAF50;
+}
+
+.online.selected {
+	background-color: #4CAF50 !important;
+	color: white !important;
+}
+
+.offline.selected {
+	background-color: #F44336 !important;
+	color: white !important;
+}
+
+#results {
+	width: 100%;
+}
+
+.message {
+	margin-right: 40px;
+	margin-bottom: 10px;
+	padding: 10px;
+	width: calc(100% - 60px);
+	border-radius: 2px;
+	background-color: white;
+	-webkit-box-shadow: 1px 1px 5px 0 rgba(179, 179, 179, 0.48);
+	-moz-box-shadow: 1px 1px 5px 0 rgba(179, 179, 179, 0.48);
+	box-shadow: 1px 1px 5px 0 rgba(179, 179, 179, 0.48);
+}
+
+.time {
+	margin-right: 20px;
+}
+
+.text {
+	max-width: 75%;
+}
+
+.sent {
+	margin-right: 0;
+	margin-left: 40px;
+	background-color: rgba(0, 102, 153, 0.75);
+	color: white;
+}
+
+.sent > .time {
+	float: right;
+	margin-right: 0;
+	text-align: right;
+}

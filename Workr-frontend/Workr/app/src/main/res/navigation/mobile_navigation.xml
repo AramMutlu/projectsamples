@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@id/navigation_overview">
+    <fragment
+        android:id="@+id/navigation_overview"
+        android:name="com.example.workr.Overview.OverviewFragment"
+        android:label="Overview"
+        tools:layout="@layout/fragment_overview" />
+    <fragment
+        android:id="@+id/navigation_openshifts"
+        android:name="com.example.workr.OpenShifts.OpenShiftsFragment"
+        android:label="Open shifts"
+        tools:layout="@layout/fragment_openshifts" />
+    <fragment
+        android:id="@+id/navigation_profile"
+        android:name="com.example.workr.Profile.ProfileFragment"
+        android:label="Profile"
+        tools:layout="@layout/fragment_profile" />
+</navigation>

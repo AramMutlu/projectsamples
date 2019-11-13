@@ -1,0 +1,816 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "description" : "Workr API",
+    "version" : "2.1.0-oas3",
+    "title" : "Workr API",
+    "license" : {
+      "name" : "Apache 2.0",
+      "url" : "http://www.apache.org/licenses/LICENSE-2.0.html"
+    }
+  },
+  "security" : [ {
+    "bearerAuth" : [ ]
+  } ],
+  "tags" : [ {
+    "name" : "General",
+    "description" : "Available for all"
+  }, {
+    "name" : "Employer",
+    "description" : "Only available for employers"
+  }, {
+    "name" : "Employee",
+    "description" : "Only available for employees"
+  }, {
+    "name" : "Admin",
+    "description" : "Only available for Admins"
+  } ],
+  "paths" : {
+    "/appVersion" : {
+      "post" : {
+        "tags" : [ "General" ],
+        "summary" : "check for new versions",
+        "operationId" : "appVersion",
+        "description" : "When starting the application you can force the user to update their app or chek if the app is modified\n",
+        "parameters" : [ {
+          "in" : "query",
+          "name" : "appVersion",
+          "description" : "input the installed version",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "in" : "query",
+          "name" : "androidLevel",
+          "description" : "input the current android level of the users phone",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "minimum" : 7
+          }
+        }, {
+          "in" : "query",
+          "name" : "appKey",
+          "description" : "the hashed version of the app",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          },
+          "301" : {
+            "description" : "NOT OK"
+          },
+          "308" : {
+            "description" : "Current installed version is not valid"
+          },
+          "400" : {
+            "description" : "bad request"
+          },
+          "500" : {
+            "description" : "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/appUrls" : {
+      "get" : {
+        "tags" : [ "General" ],
+        "summary" : "check for new urls",
+        "operationId" : "appUrls",
+        "parameters" : [ {
+          "in" : "query",
+          "name" : "hash",
+          "description" : "a hash that acts as an url version check",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/appurls"
+                }
+              }
+            }
+          },
+          "301" : {
+            "description" : "NOT OK"
+          },
+          "308" : {
+            "description" : "Current installed version is not valid"
+          },
+          "400" : {
+            "description" : "bad request"
+          },
+          "500" : {
+            "description" : "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/register" : {
+      "post" : {
+        "tags" : [ "General" ],
+        "summary" : "Registers a new user as employee",
+        "operationId" : "addEmployee",
+        "description" : "adds an user to a company",
+        "responses" : {
+          "201" : {
+            "description" : "Created",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/User"
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request"
+          },
+          "409" : {
+            "description" : "You already have an account"
+          },
+          "500" : {
+            "description" : "Unknown error occured"
+          }
+        },
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "required" : [ "username", "password", "email", "name", "companycode" ],
+                "properties" : {
+                  "username" : {
+                    "type" : "string"
+                  },
+                  "password" : {
+                    "type" : "string"
+                  },
+                  "email" : {
+                    "type" : "string"
+                  },
+                  "name" : {
+                    "type" : "string"
+                  },
+                  "companycode" : {
+                    "type" : "string"
+                  }
+                }
+              }
+            }
+          },
+          "description" : "Returns the employee"
+        }
+      }
+    },
+    "/login" : {
+      "post" : {
+        "tags" : [ "General" ],
+        "summary" : "logs the user in",
+        "operationId" : "login",
+        "description" : "Returns a authorization token",
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          },
+          "401" : {
+            "description" : "Invalid username and/or password"
+          }
+        },
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "required" : [ "username", "password" ],
+                "properties" : {
+                  "username" : {
+                    "type" : "string"
+                  },
+                  "password" : {
+                    "type" : "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/shift" : {
+      "get" : {
+        "tags" : [ "General" ],
+        "summary" : "Loads the overview",
+        "operationId" : "shift",
+        "description" : "returns a list of all shifts",
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/Shift"
+                  }
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Something went wrong"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/forbidden"
+          },
+          "404" : {
+            "$ref" : "#/components/responses/usernotfound"
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "Employer" ],
+        "summary" : "Create a shift",
+        "operationId" : "createShift",
+        "description" : "The employer can create a shift for a employee",
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/Shift"
+                  }
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Something went wrong"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/forbidden"
+          },
+          "404" : {
+            "$ref" : "#/components/responses/usernotfound"
+          }
+        },
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "required" : [ "username", "isOpen", "date", "start", "end", "companycode" ],
+                "properties" : {
+                  "username" : {
+                    "type" : "string"
+                  },
+                  "isOpen" : {
+                    "type" : "boolean"
+                  },
+                  "date" : {
+                    "type" : "string"
+                  },
+                  "start" : {
+                    "type" : "string"
+                  },
+                  "end" : {
+                    "type" : "string"
+                  },
+                  "companycode" : {
+                    "type" : "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/shift/open" : {
+      "get" : {
+        "tags" : [ "General" ],
+        "summary" : "show open shifts",
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ],
+        "operationId" : "openShifts",
+        "description" : "returns a list of open shifts",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/Shift"
+                  }
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Something went wrong"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/forbidden"
+          },
+          "404" : {
+            "$ref" : "#/components/responses/usernotfound"
+          }
+        }
+      }
+    },
+    "/shift/askfree" : {
+      "put" : {
+        "tags" : [ "General" ],
+        "summary" : "sets the shift on available",
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ],
+        "operationId" : "askFree",
+        "description" : "When asking free, the shift will be put on available till someone takes it over",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/Shift"
+                  }
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Something went wrong"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/forbidden"
+          },
+          "404" : {
+            "$ref" : "#/components/responses/usernotfound"
+          }
+        },
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "required" : [ "shiftid" ],
+                "properties" : {
+                  "shiftid" : {
+                    "type" : "integer"
+                  }
+                }
+              }
+            }
+          },
+          "description" : "Returns the shift that has been set to free"
+        }
+      }
+    },
+    "/shift/cancelrequest" : {
+      "put" : {
+        "tags" : [ "General" ],
+        "summary" : "cancels the shift request",
+        "operationId" : "cancelRequest",
+        "description" : "It will cancel the request that was put open",
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/Shift"
+                  }
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Something went wrong"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/forbidden"
+          },
+          "404" : {
+            "$ref" : "#/components/responses/usernotfound"
+          }
+        },
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "required" : [ "shiftid" ],
+                "properties" : {
+                  "shiftid" : {
+                    "type" : "integer"
+                  }
+                }
+              }
+            }
+          },
+          "description" : "Returns the cancelled request"
+        }
+      }
+    },
+    "/shift/fill" : {
+      "put" : {
+        "tags" : [ "General" ],
+        "summary" : "takes a shift over",
+        "operationId" : "fillShift",
+        "description" : "when a shift is open, the user can take it over",
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/Shift"
+                  }
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Something went wrong"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/forbidden"
+          },
+          "404" : {
+            "$ref" : "#/components/responses/usernotfound"
+          }
+        },
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "required" : [ "shiftid" ],
+                "properties" : {
+                  "shiftid" : {
+                    "type" : "integer"
+                  }
+                }
+              }
+            }
+          },
+          "description" : "returns the filled shift"
+        }
+      }
+    },
+    "/user/password" : {
+      "put" : {
+        "tags" : [ "General" ],
+        "summary" : "Change password",
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ],
+        "operationId" : "changePassword",
+        "description" : "The user can change his password",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/User"
+                  }
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Something went wrong"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/forbidden"
+          },
+          "404" : {
+            "$ref" : "#/components/responses/usernotfound"
+          }
+        },
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "required" : [ "password" ],
+                "properties" : {
+                  "newpassword" : {
+                    "type" : "string"
+                  }
+                }
+              }
+            }
+          },
+          "description" : "Returns the edited profile"
+        }
+      }
+    },
+    "/user/email" : {
+      "put" : {
+        "tags" : [ "General" ],
+        "summary" : "Updated email",
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ],
+        "operationId" : "changeEmail",
+        "description" : "changes the email of the user",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/User"
+                  }
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Something went wrong"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/forbidden"
+          },
+          "404" : {
+            "$ref" : "#/components/responses/usernotfound"
+          }
+        },
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "required" : [ "email" ],
+                "properties" : {
+                  "email" : {
+                    "type" : "string"
+                  }
+                }
+              }
+            }
+          },
+          "description" : "Returns the edited profile"
+        }
+      }
+    },
+    "/profile" : {
+      "get" : {
+        "tags" : [ "General" ],
+        "summary" : "Shows the user his profile",
+        "operationId" : "profile",
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ],
+        "description" : "Shows the user his profile",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/User"
+                  }
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Something went wrong"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/forbidden"
+          },
+          "404" : {
+            "$ref" : "#/components/responses/usernotfound"
+          }
+        }
+      }
+    },
+    "/profile/{profileid}" : {
+      "get" : {
+        "tags" : [ "General" ],
+        "summary" : "Shows the user the other profile",
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ],
+        "operationId" : "profileUser",
+        "description" : "Shows the user the other profile",
+        "parameters" : [ {
+          "name" : "profileid",
+          "in" : "path",
+          "description" : "the profileid that you are requesting",
+          "required" : true,
+          "schema" : {
+            "type" : "integer"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/User"
+                  }
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Something went wrong"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/forbidden"
+          },
+          "404" : {
+            "$ref" : "#/components/responses/usernotfound"
+          }
+        }
+      }
+    },
+    "/user/accept" : {
+      "post" : {
+        "tags" : [ "Employer" ],
+        "summary" : "accept user",
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ],
+        "operationId" : "acceptOrRefuse",
+        "description" : "when the user gets in a queue the employer can accept or refuse him",
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          },
+          "500" : {
+            "description" : "Something went wrong"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/forbidden"
+          },
+          "404" : {
+            "$ref" : "#/components/responses/usernotfound"
+          }
+        },
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "required" : [ "accept", "userid" ],
+                "properties" : {
+                  "accept" : {
+                    "type" : "boolean"
+                  },
+                  "userid" : {
+                    "type" : "integer"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "servers" : [ {
+    "url" : "https://virtserver.swaggerhub.com/workr/workrAPI/1.0.0"
+  } ],
+  "components" : {
+    "securitySchemes" : {
+      "bearerAuth" : {
+        "type" : "http",
+        "scheme" : "bearer",
+        "bearerFormat" : "JWT"
+      }
+    },
+    "schemas" : {
+      "User" : {
+        "type" : "object",
+        "required" : [ "userId", "username", "name", "email", "picture", "phone" ],
+        "properties" : {
+          "userId" : {
+            "type" : "integer",
+            "example" : 12
+          },
+          "name" : {
+            "type" : "string",
+            "example" : "John Doe"
+          },
+          "username" : {
+            "type" : "string",
+            "example" : "JohnDoe"
+          },
+          "email" : {
+            "type" : "string",
+            "example" : "johndoe@gmail.com"
+          },
+          "picture" : {
+            "type" : "string",
+            "example" : "base64 string"
+          },
+          "phone" : {
+            "type" : "string",
+            "example" : 6.12345678E8
+          }
+        }
+      },
+      "Shift" : {
+        "type" : "object",
+        "required" : [ "User", "date", "start", "end", "shiftId", "open" ],
+        "properties" : {
+          "User" : {
+            "$ref" : "#/components/schemas/User"
+          },
+          "date" : {
+            "type" : "string",
+            "format" : "date-time",
+            "example" : "2019-11-11T00:00:00.000Z"
+          },
+          "start" : {
+            "type" : "string",
+            "format" : "time",
+            "example" : "08:00 a.m."
+          },
+          "end" : {
+            "type" : "string",
+            "format" : "time",
+            "example" : "11:00 a.m."
+          },
+          "shiftId" : {
+            "type" : "integer",
+            "example" : 13
+          },
+          "open" : {
+            "type" : "boolean",
+            "example" : true
+          }
+        }
+      },
+      "appurls" : {
+        "type" : "array",
+        "required" : [ "name", "url" ],
+        "items" : {
+          "properties" : {
+            "name" : {
+              "type" : "string",
+              "example" : "profile"
+            },
+            "start" : {
+              "type" : "string",
+              "example" : "/user/profile"
+            }
+          }
+        }
+      }
+    },
+    "responses" : {
+      "usernotfound" : {
+        "description" : "User not found"
+      },
+      "forbidden" : {
+        "description" : "You are not logged in."
+      }
+    }
+  }
+}

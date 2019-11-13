@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Registreren</title>
+</head>
+<body>
+<form action="./LoginServlet" method="post">
+    <h1>Registreren</h1>
+    Gebruikersnaam <br/>
+    <input type="text" name="username" required>
+    <br/>
+    wachtwoord <br/>
+    <input type="password" name="password1" required>
+    <br/>
+    Herhaal wachtwoord <br/>
+    <input type="password" name="password2" required>
+    <br/>
+
+    <input type="radio" name="userType" value="huurder">Huurder<br>
+    <input type="radio" name="userType" value="verhuurder">Verhuurder<br>
+    <br/>
+    <input type="submit" name="extra" value="register">
+</form>
+</body>
+</html>

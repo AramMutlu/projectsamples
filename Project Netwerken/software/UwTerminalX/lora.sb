@@ -1,0 +1,361 @@
+//******************************************************************************
+// Copyright (c) 2016-2017, Laird
+//
+// Permission to use, copy, modify, and/or distribute this software for any
+// purpose with or without fee is hereby granted, provided that the above
+// copyright notice and this permission notice appear in all copies.
+//
+// THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+// WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+// MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY
+// SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+// WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+// ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR
+// IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+//
+// SPDX-License-Identifier:ISC
+//
+// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// +++++                                                                      ++
+// +++++  When UwTerminal downloads the app it will store it as a filename    ++
+// +++++  which consists of all characters up to the first . and excluding it ++
+// +++++                                                                      ++
+// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+//
+// This application is designed to be ran on the RM186 and will join a LoRa
+// network and continually transmit data to it.
+//
+//******************************************************************************
+
+#include "RM1xxdefs.h"
+
+        //Size of i[]
+#define NUM_OF_I_PARAMS                     (8)
+
+Dim rc
+Dim data$
+Dim x
+dim tlen,tkn$
+dim i[NUM_OF_I_PARAMS]     //Index 0 used for return values
+dim urtcmd$                //CMD line from uart
+dim urts
+dim stRsp$
+dim str$
+dim reg
+dim stringVal$
+dim numnosync
+dim packettype
+dim joined
+dim maxsize
+dim currentsize
+
+//-------------------------------------------------------------------------
+//-------------------------------------------------------------------------
+function ExtractIntTokens(u$,stIdx,num)
+    while num>0
+        tlen = ExtractIntToken(u$,i[stIdx])
+        if tlen == 0 then
+            exitfunc 4
+        endif
+        num=num-1
+        stIdx = stIdx+1
+    endwhile
+endfunc 0
+
+
+//-------------------------------------------------------------------------
+// Joining event
+//-------------------------------------------------------------------------
+FUNCTION LoramacJoining() As Integer
+    print "\nJoining"
+endfunc 1
+
+//-------------------------------------------------------------------------
+// Joined event
+//-------------------------------------------------------------------------
+FUNCTION LoramacJoined() As Integer
+    print "\nSuccessfully Joined network"
+    joined = 1
+endfunc 1
+
+//-------------------------------------------------------------------------
+// Tx complete event - marks the end of a transmit/receive cycle
+//-------------------------------------------------------------------------
+FUNCTION LoramacTxComplete() As Integer
+    str$ = "\nTxComplete event received - next packet can be loaded"
+    Print str$
+endfunc 1
+
+//-------------------------------------------------------------------------
+// RxData event - data has been received from the gateway
+//-------------------------------------------------------------------------
+FUNCTION HandlerRxData() As Integer
+    dim datastr$ as string
+    dim rssi$ as integer
+    dim port$ as integer
+    dim snr$ as integer
+    dim framepending$ as integer
+    dim packettype$ as integer
+    rc = LORAMACRxData(datastr$,rssi$,port$,snr$,framepending$,packettype$)
+    sprint #str$,"\n\22";datastr$;"\22 received from the gateway"
+    Print str$
+    sprint #str$,"\nReceived packet rssi: ";rssi$;" snr: ";snr$;" frames pending: ";framepending$;" packet type: ";packettype$
+    Print str$
+endfunc 1
+
+//--------------------------------------------------------------------------------------------------------------------------
+// Rx complete event - also marks the end of a transmit/receive cycle when using confirmed packets or the gateway sends data
+//--------------------------------------------------------------------------------------------------------------------------
+FUNCTION LoramacRxComplete() As Integer
+     //str$ = "\nRx completed "
+     //Print str$
+endfunc 1
+
+//-------------------------------------------------------------------------
+// RxTimeout event 
+// returned after every missed 
+//-------------------------------------------------------------------------
+FUNCTION LoramacRxTimeout() As Integer
+    print "\nRx Timeout"
+    if joined == 0 then
+      print "\nfailed to join network"
+    endif
+endfunc 1
+
+//-------------------------------------------------------------------------
+// TxTimeout event
+//-------------------------------------------------------------------------
+FUNCTION LoramacTxTimeout() As Integer
+    print "\nTx Timeout"
+endfunc 1
+
+//-------------------------------------------------------------------------
+// RxError event - crc error
+//-------------------------------------------------------------------------
+FUNCTION LoramacRxError() As Integer
+    print "\nRx Error"
+endfunc 1
+
+//-------------------------------------------------------------------------
+// LinkResponse event - a response to a LinkCheck has been received
+//-------------------------------------------------------------------------
+FUNCTION LoramacLinkResponse(Margin, Gateways) As Integer
+    sprint #str$,"\nMargin: ";Margin
+    Print str$
+endfunc 1
+
+//-------------------------------------------------------------------------
+// TxDone event - packet has been transmitted to the gateway
+//-------------------------------------------------------------------------
+FUNCTION HandlerTxDone() As Integer
+    numnosync = 0
+    if packettype == 0 then
+        str$ = "\nTxDone event received - JoinRequest transmitted to the gateway"
+    else
+        sprint #str$,"\nTxDone event received - \22";data$;"\22 sent to gateway"
+    endif
+    Print str$
+endfunc 1
+
+//------------------------------------------------------------------------------
+// NoSync event - an RxWindow has closed after it failed to receive a sync pulse
+//------------------------------------------------------------------------------
+FUNCTION HandlerNoSync() As Integer
+    if numnosync == 0 then
+        str$ = "\nFirst receive window timed out"
+        numnosync = 1
+    else
+        str$ = "\nSecond receive window timed out"
+        numnosync = 0
+    endif
+    Print str$
+endfunc 1
+
+//------------------------------------------------------------------------------
+// Adr packet has been received so configuration might have changed
+//------------------------------------------------------------------------------
+FUNCTION HandlerAdr(PacketType, FramePending) As Integer
+    dim dr$,pow$
+    sprint #str$,"\nAdr received (Type: ";PacketType;") - "
+    Print str$
+    rc = LORAMACGetOption(LORAMAC_OPT_TX_POWER, pow$)
+    rc = LORAMACGetOption(LORAMAC_OPT_DATA_RATE, dr$)
+    sprint #str$,"power ";pow$;" datarate ";dr$;"\n"
+    Print str$
+endfunc 1
+
+//------------------------------------------------------------------------------
+// Uplnk/downlink sequence has completed - this is an amalgamation of the above events.
+// The flag indicates which of the above end of seqnece events triggered this event.
+// nexttime is the time to the next EVLORAMACNEXTTX  event.
+// For AU and US modules this will be 0 and it is safe to send the next packet.
+//------------------------------------------------------------------------------
+FUNCTION HandlerSequenceComplete(flag, nexttime) As Integer
+  Print  "\nSequence complete ";flag
+  Print  "\nNext time ",nexttime
+endfunc 1
+
+//==============================================================================
+// there is now duty cycle available to send the next packet
+//==============================================================================
+function HandlrNextTx()
+    print "\n---------------------------------------\n"
+    Print  "\nNext Tx"
+    if joined == 1 then
+      // Check to see that the packet size is within limits.
+      rc = LoramacQueryTxPossible(strlen(data$),currentsize,maxsize)
+      if rc == 0 then
+        Print "\ncurrent ";currentsize
+        Print "\nmax ";maxsize
+        rc = LORAMACTxData(2,data$, 1)
+        if rc != 0 then
+          Print "\nFailed to send packet: rc = ";integer.h' rc
+        endif
+      else
+        Print "current ";currentsize
+      endif
+    endif
+endfunc 1
+
+//-------------------------------------------------------------------------
+//#CMD#// lora update param$   #INTvalue# 
+//#CMD#// lora readparam  param$  #INTvalue# 
+//#CMD#// lora readreg  #INTreg#  #INTvalue# 
+//#CMD#// lora pollregs 
+//#CMD#// lora tx 
+//#CMD#// lora txpkts1 #INTfrequencyChannel# #INTDataRate# #INTPowerBand # #INThandle#
+//#CMD#// lora cancel #INThandle#
+//-------------------------------------------------------------------------
+function _Lora()
+    dim prAdr$ 
+    dim val
+    dim res
+    dim tkn$
+
+    tlen = ExtractStrToken(urtcmd$,tkn$)
+    if tlen == 0 then
+      exitfunc 5
+    endif
+
+    //Sends a JoinRequest to the gateway
+    if strcmp(tkn$,"join")==0 then
+        packettype = 0
+        rc = ExtractIntToken(urtcmd$,val)
+        rc = LORAMACJoin(val)
+        exitfunc 0
+    endif
+
+    //Calls the LoramacGetOption command -  outputs some of the configuration options
+    if strcmp(tkn$,"get")==0 then
+        rc = ExtractIntToken(urtcmd$,reg)
+        rc = LORAMACGetOption(reg, stringVal$)
+        sprint #str$,stringVal$;"\n"
+        Print str$
+        exitfunc 0
+    endif
+
+    //Transmits a LinkCheck command
+    if strcmp(tkn$,"link")==0 then
+        exitfunc LORAMACLinkCheck()
+    endif
+
+    //Calls the LoramacSetOption command - sets some of the configuration optons
+    if strcmp(tkn$,"set")==0 then
+        rc = ExtractIntToken(urtcmd$,reg)
+        tlen = ExtractStrToken(urtcmd$,tkn$)
+        if tlen != 0 then
+            rc = LORAMACSetOption(reg, tkn$)
+            print "\n";integer.h' rc
+            if rc == 0 then
+                sprint #str$,"\n";integer.h' rc;" ";tkn$
+            else
+                sprint #str$,"\n";integer.h' rc
+            endif
+            Print str$
+        endif
+        exitfunc 0
+    endif
+
+    //Enables/disables the debug option
+    if strcmp(tkn$,"debug")==0 then
+        rc = ExtractIntTokens(urtcmd$,0,3)
+        if rc == 0 then
+            rc = LORAMACSetDebug(i[0],i[1],i[2])
+        endif
+        exitfunc rc
+    endif
+endfunc 5
+
+//==============================================================================
+//==============================================================================
+function OnUartCmd() as integer
+    rc=1 //assume there is an error
+    tlen = ExtractStrToken(urtcmd$,tkn$) //get first token
+    if tlen == 0 then
+        rc=0
+    elseif tlen > 0 then
+        if strcmp(tkn$,"lora")==0 then
+            rc = _Lora()
+            if rc != 0 then
+                sprint #str$,"\nError ";integer.h' rc
+                Print str$
+            endif
+        elseif (strcmp(tkn$,"exit")==0)||(strcmp(tkn$,"stop")==0) then
+            print "\nType..\nRESUME          to continue the application"
+            print "\n? VARNAME       to inspect a variable"
+            print "\n= VARNAME VALUE to change a variable"
+            stop 
+            rc=0
+        endif
+    endif
+endfunc 1
+
+
+//==============================================================================
+//==============================================================================
+function HandlerUartRxCmd() as integer
+    dim nMatch
+
+    if urts < 0 then
+        //UART parser is suspended
+        exitfunc 1
+    endif
+
+    //Check if CR has been received
+    nMatch=UartReadMatch(stRsp$,13)
+    if nMatch!=0 then
+        //CR exists in the input buffer
+        urtcmd$ = strsplitleft$(stRsp$,nMatch)
+        exitfunc OnUartCmd()
+    endif
+endfunc 1
+
+
+ONEVENT EVLORAMACJOINING    CALL LoramacJoining
+ONEVENT EVLORAMACJOINED    CALL LoramacJoined
+ONEVENT EVLORAMACTXCOMPLETE    CALL LoramacTxComplete
+ONEVENT EVLORAMACRXTIMEOUT CALL LoramacRxTimeout
+ONEVENT EVLORAMACTXTIMEOUT CALL LoramacTxTimeout
+ONEVENT EVLORAMACRXERROR CALL LoramacRxError
+ONEVENT EVLORAMACRXCOMPLETE    CALL LoramacRxComplete
+ONEVENT EVLORAMACLINKCHECKRESPMSG CALL LoramacLinkResponse
+ONEVENT EVUARTRX CALL HandlerUartRxCmd
+ONEVENT EVLORAMACTXDONE CALL HandlerTxDone
+ONEVENT EVLORAMACNOSYNC CALL HandlerNoSync
+ONEVENT EVLORAMACADR CALL HandlerAdr
+ONEVENT EVLORAMACRXDATA CALL HandlerRxData
+ONEVENT EVLORAMACSEQUENCECOMPLETE CALL HandlerSequenceComplete
+ONEVENT EVLORAMACNEXTTX CALL HandlrNextTx
+
+// Initialise variables
+data$ = "CHECKING FOR NEW MESSAGES"
+numnosync = 0
+packettype = 0
+
+joined = 0
+rc = LORAMACJoin(1)
+if rc != 0 then
+  print "Error: rc = ";integer.h' rc
+endif
+
+WAITEVENT

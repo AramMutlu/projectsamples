@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Kamer Toevoegen</title>
+</head>
+<body>
+<h1>Kamer toevoegen</h1>
+<form action="./AddRoomServlet" method="post">
+    Titel <br/>
+    <input type="text" name="title" required> <br/>
+    Aantal m2 <br/>
+    <input type="number" name="surface" required> <br/>
+    Huurprijs <br/>
+    <input type="number" name="rent" required> <br/>
+    Adres <br/>
+    <input type="text" name="address" required> <br/>
+    Plaats <br/>
+    <select name = "city">
+        <option value="Enschede">Enschede</option>
+        <option value="Hengelo">Hengelo</option>
+        <option value="Almelo">Almelo</option>
+    </select>
+    <input type="submit" name="extra" value="Kamer toevoegen">
+</form>
+
+<FORM METHOD='POST' ACTION='./LoginServlet'><INPUT TYPE='submit' name='extra' VALUE='logout'></FORM>
+
+</body>
+</html>

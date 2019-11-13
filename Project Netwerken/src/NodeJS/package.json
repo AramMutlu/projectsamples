@@ -1,0 +1,16 @@
+{
+  "name": "test",
+  "version": "0.0.0",
+  "private": true,
+  "main": "app.js",
+  "dependencies": {
+    "body-parser": "~1.18.2",
+    "cookie-parser": "~1.4.3",
+    "express": "~4.15.5",
+    "serialport": "^6.1.1",
+    "tape": "^4.9.0"
+  },
+  "devDependencies": {
+    "ip": "^1.1.5"
+  }
+}

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="10dp"
+    tools:context="com.example.loraapp.MainActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/etMessage"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:maxHeight="150dp"
+            android:layout_weight="1"
+            android:hint="@string/write_a_message" />
+
+        <EditText
+            android:id="@+id/etPriority"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:maxHeight="150dp"
+            android:layout_weight="0.3"
+            android:hint="@string/Priority" />
+
+        <ImageButton
+            android:id="@+id/ivAlert"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:padding="0dp"
+            android:src="@drawable/ic_announcement_black_24dp"
+            android:contentDescription="Alert chooser" />
+
+        <Button
+            android:id="@+id/btnSend"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:text="@string/send" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvAlert"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rvReceivedMessages"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="25dp"
+        android:layout_marginTop="25dp"
+        android:layout_weight="1" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:divider="?android:dividerHorizontal"
+        android:showDividers="middle">
+
+        <TextView
+            android:id="@+id/wifiStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:drawableTop="@drawable/ic_wifi_black_24dp"
+            android:text="@string/status_disabled"
+            android:textAlignment="center" />
+
+        <TextView
+            android:id="@+id/bluetoothStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:drawableTop="@drawable/ic_bluetooth_black_24dp"
+            android:text="@string/status_disabled"
+            android:textAlignment="center" />
+
+    </LinearLayout>
+
+</LinearLayout>

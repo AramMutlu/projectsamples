@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
+
+	<androidx.constraintlayout.widget.ConstraintLayout
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:paddingBottom="64dp"
+		tools:context=".ui.report.ReportFragment">
+
+		<com.google.android.material.textfield.TextInputLayout
+			android:id="@+id/input_body_temperature_parent"
+			android:layout_width="match_parent"
+			android:layout_height="0dp"
+			android:layout_margin="16dp"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toTopOf="parent">
+
+			<com.google.android.material.textfield.TextInputEditText
+				android:id="@+id/input_report"
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"
+				android:gravity="top"
+				android:hint="Report"
+				android:padding="8dp" />
+		</com.google.android.material.textfield.TextInputLayout>
+		<!--
+			<View
+				android:id="@+id/measurements"
+				android:layout_width="match_parent"
+				android:layout_height="56dp"
+				app:layout_constraintBottom_toBottomOf="parent" />-->
+
+	</androidx.constraintlayout.widget.ConstraintLayout>
+
+	<FrameLayout
+		android:id="@+id/bottomSheetParent"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		app:behavior_hideable="false"
+		app:behavior_peekHeight="64dp"
+		app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+		<include
+			android:id="@+id/bottom_sheet"
+			layout="@layout/measurements_bottom_sheet" />
+	</FrameLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

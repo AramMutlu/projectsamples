@@ -1,0 +1,702 @@
+{
+	"info": {
+		"_postman_id": "2974839e-aaef-4777-b313-ba8db7d77b91",
+		"name": "Test",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Register",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "9ba9c474-b7d9-4b78-adb8-fe541a97c325",
+						"exec": [
+							"//Should return 201. Its the first time we create this",
+							"pm.test(\"First time creating account\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"pm.test(\"ERROR\", function(){",
+							"    pm.response.not.to.have.status(201);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"username\": \"testusername\",\r\n\t\"password\": \"testusername\",\r\n\t\"email\": \"test@test.com\",\r\n\t\"name\": \"Tester\",\r\n\t\"companycode\": \"workr\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/register",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register BAD",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "9ba9c474-b7d9-4b78-adb8-fe541a97c325",
+						"exec": [
+							"//Should return 409.",
+							"pm.test(\"Already have an account\", function () {",
+							"    pm.response.to.have.status(409);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"username\": \"testusername\",\r\n\t\"password\": \"testusername\",\r\n\t\"email\": \"test@test.com\",\r\n\t\"name\": \"Hamed\",\r\n\t\"companycode\": \"abc\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/register",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "96752862-1caf-4d99-91cb-a5ff2b8e995a",
+						"exec": [
+							"//Should return 200",
+							"pm.test(\"Log in. Autorization in header!. Copy paste in other requests\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"response should not have error\", function () {",
+							"    pm.response.to.not.be.error;",
+							"    pm.response.to.not.have.jsonBody(\"\");",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"username\": \"testusername\",\n\t\"password\": \"testusername\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/login",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login BAD",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "33ae1590-a26e-4bdf-a3bf-886d909f8c5a",
+						"exec": [
+							"//Should return 200",
+							"pm.test(\"Log in. Fail because the login in invalid\", function () {",
+							"    pm.response.to.have.status(401);",
+							"});",
+							"",
+							"pm.test(\"response should not have error\", function () {",
+							"    pm.response.to.be.error;",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"username\": \"testusernamefailed\",\n\t\"password\": \"testusernamefailed\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/login",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Any Request without Auth BAD",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "8b07e18d-bfb6-49c2-8b44-827ae156aa72",
+						"exec": [
+							"//There is no authorisation key, so it should give an 403",
+							"pm.test(\"No auth token, should return 403\", function () {",
+							"    pm.response.to.have.status(403);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0dXNlcm5hbWUiLCJhdXRoIjpbXSwiZXhwIjoxNTczMzA3NDUxfQ.03wsOKY6fvxebzJ2l7oNGmZYa6Vtvuh1jx5ikrCn3hBwfBOP0GsS_jAKPAfHEMrfudtMPtcHDl3DpSV33r2GfQ",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/shifts",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"shifts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get created company",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "917aa4c6-8a83-4f50-b373-90aebf926ae1",
+						"exec": [
+							"//company exists, if created",
+							"pm.test(\"Company exists\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0dXNlcm5hbWUiLCJhdXRoIjpbXSwiZXhwIjoxNTczMzA3NDUxfQ.03wsOKY6fvxebzJ2l7oNGmZYa6Vtvuh1jx5ikrCn3hBwfBOP0GsS_jAKPAfHEMrfudtMPtcHDl3DpSV33r2GfQ",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/company/abc",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"company",
+						"abc"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get created company BAD",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "917aa4c6-8a83-4f50-b373-90aebf926ae1",
+						"exec": [
+							"//No company exists",
+							"pm.test(\"Company exists\", function () {",
+							"    pm.response.to.have.status(404);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0dXNlcm5hbWUiLCJhdXRoIjpbXSwiZXhwIjoxNTczMzA3NDUxfQ.03wsOKY6fvxebzJ2l7oNGmZYa6Vtvuh1jx5ikrCn3hBwfBOP0GsS_jAKPAfHEMrfudtMPtcHDl3DpSV33r2GfQ"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/company/abcd",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"company",
+						"abcd"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get shifts ",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "73072dd6-5fae-41b2-9126-fc03e8f21faf",
+						"exec": [
+							"",
+							"pm.test(\"Got shifts\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"response should not have error\", function () {",
+							"    pm.response.to.not.be.error;",
+							"    pm.response.to.not.have.jsonBody(\"\");",
+							"});",
+							"",
+							"pm.test(\"response must be valid and have a body\", function () {",
+							"     // assert that the status code is 200",
+							"     pm.response.to.be.ok; // info, success, redirection, clientError,  serverError, are other variants",
+							"     // assert that the response has a valid JSON body",
+							"     pm.response.to.be.withBody;",
+							"     pm.response.to.be.json; // this assertion also checks if a body  exists, so the above check is not needed",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0dXNlcm5hbWUiLCJhdXRoIjpbXSwiZXhwIjoxNTczMzA3NDUxfQ.03wsOKY6fvxebzJ2l7oNGmZYa6Vtvuh1jx5ikrCn3hBwfBOP0GsS_jAKPAfHEMrfudtMPtcHDl3DpSV33r2GfQ",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\t\"user\": \"usernamehamed1\",\r\n\t\t\"company\": \"abc\",\r\n\t\t\"isOpen\" : false,\r\n\t\t\"date\": \"2019-10-10\",\r\n\t\t\"start\": \"2019-10-09T08:54:23.292+0000\",\r\n\t\t\"end\": \"2019-10-09T08:54:23.292+0000\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/shift",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"shift"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Ask shifts free",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "8a227826-a298-4b3e-a1de-28d2cee98b7a",
+						"exec": [
+							"",
+							"pm.test(\"Got shifts\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"response should not have error\", function () {",
+							"    pm.response.to.not.be.error;",
+							"    pm.response.to.not.have.jsonBody(\"\");",
+							"});",
+							"",
+							"pm.test(\"response must be valid and have a body\", function () {",
+							"     // assert that the status code is 200",
+							"     pm.response.to.be.ok; // info, success, redirection, clientError,  serverError, are other variants",
+							"     // assert that the response has a valid JSON body",
+							"     pm.response.to.be.withBody;",
+							"     pm.response.to.be.json; // this assertion also checks if a body  exists, so the above check is not needed",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0dXNlcm5hbWUiLCJhdXRoIjpbXSwiZXhwIjoxNTczMzA3NDUxfQ.03wsOKY6fvxebzJ2l7oNGmZYa6Vtvuh1jx5ikrCn3hBwfBOP0GsS_jAKPAfHEMrfudtMPtcHDl3DpSV33r2GfQ",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"shift_id\": 25\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/shift/askfree",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"shift",
+						"askfree"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get own profile",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "d3594f45-91ea-4330-9305-2d516a490c16",
+						"exec": [
+							"pm.test(\"Got profile\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"response should not have error\", function () {",
+							"    pm.response.to.not.be.error;",
+							"    pm.response.to.not.have.jsonBody(\"\");",
+							"});",
+							"",
+							"pm.test(\"response must be valid and have a body\", function () {",
+							"     // assert that the status code is 200",
+							"     pm.response.to.be.ok; // info, success, redirection, clientError,  serverError, are other variants",
+							"     // assert that the response has a valid JSON body",
+							"     pm.response.to.be.withBody;",
+							"     pm.response.to.be.json; // this assertion also checks if a body  exists, so the above check is not needed",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0dXNlcm5hbWUiLCJhdXRoIjpbXSwiZXhwIjoxNTczMzA2ODM3fQ.hBn9bfolkh4E2x0X1yHIxLCqmdUsiYpcns1IdQARto09WcjqTUhFxim-mbDoJpMsM5bZ1w0gZlf2pDarHmXPnA",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/profile/testusername",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"profile",
+						"testusername"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get open shifts",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "96f49a75-d709-4fc9-ad37-d35a62a791cc",
+						"exec": [
+							"",
+							"pm.test(\"Got openshifts\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"response should not have error\", function () {",
+							"    pm.response.to.not.be.error;",
+							"    pm.response.to.not.have.jsonBody(\"\");",
+							"});",
+							"",
+							"pm.test(\"response must be valid and have a body\", function () {",
+							"     // assert that the status code is 200",
+							"     pm.response.to.be.ok; // info, success, redirection, clientError,  serverError, are other variants",
+							"     // assert that the response has a valid JSON body",
+							"     pm.response.to.be.withBody;",
+							"     pm.response.to.be.json; // this assertion also checks if a body  exists, so the above check is not needed",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0dXNlcm5hbWUiLCJhdXRoIjpbXSwiZXhwIjoxNTczMzA2ODM3fQ.hBn9bfolkh4E2x0X1yHIxLCqmdUsiYpcns1IdQARto09WcjqTUhFxim-mbDoJpMsM5bZ1w0gZlf2pDarHmXPnA",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/shift/open",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"shift",
+						"open"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer"
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "3a87c39f-8a00-47fb-ae3d-7a2742ae6307",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "3341fdb3-55e0-4ef1-841c-63e5d4059269",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"protocolProfileBehavior": {}
+}

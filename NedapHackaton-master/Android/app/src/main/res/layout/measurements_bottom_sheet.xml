@@ -1,0 +1,347 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/measurements"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintTop_toTopOf="parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/stats"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/measurements_title"
+                style="@style/Title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:text="Report"
+                android:textSize="18sp"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/blood_title"
+                style="@style/Title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Blood"
+                android:textSize="18sp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@id/body_temp_title"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/blood_value"
+                style="@style/Subtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="120 / 80"
+                android:textSize="12sp"
+                app:layout_constraintEnd_toEndOf="@id/blood_title"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@id/body_temp_value"
+                app:layout_constraintStart_toStartOf="@id/blood_title"
+                app:layout_constraintTop_toBottomOf="@id/blood_title" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/body_temp_title"
+                style="@style/Title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="32dp"
+                android:layout_marginRight="32dp"
+                android:text="Body Temp"
+                android:textSize="18sp"
+                app:layout_constraintLeft_toRightOf="@id/blood_title"
+                app:layout_constraintRight_toLeftOf="@id/weight_title"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/body_temp_value"
+                style="@style/Subtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="34.5C"
+                android:textSize="12sp"
+                app:layout_constraintEnd_toEndOf="@id/body_temp_title"
+                app:layout_constraintLeft_toRightOf="@id/blood_value"
+                app:layout_constraintRight_toLeftOf="@id/weight_value"
+                app:layout_constraintStart_toStartOf="@id/body_temp_title"
+                app:layout_constraintTop_toBottomOf="@id/blood_title" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/weight_title"
+                style="@style/Title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Weight"
+                android:textSize="18sp"
+                app:layout_constraintLeft_toRightOf="@id/body_temp_title"
+                app:layout_constraintRight_toRightOf="@id/action_show_measurements"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/weight_value"
+                style="@style/Subtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="75 KG"
+                android:textSize="12sp"
+                app:layout_constraintEnd_toEndOf="@id/weight_title"
+                app:layout_constraintLeft_toRightOf="@id/body_temp_value"
+                app:layout_constraintRight_toRightOf="@id/action_show_measurements"
+                app:layout_constraintStart_toStartOf="@id/weight_title"
+                app:layout_constraintTop_toBottomOf="@id/blood_title" />
+
+            <ImageView
+                android:id="@+id/action_show_measurements"
+                android:layout_width="24dp"
+                android:layout_height="wrap_content"
+                android:src="@drawable/expand"
+                android:tint="@color/colorAccent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/weight_title"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card_body_temperature"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:foreground="?selectableItemBackground"
+            app:layout_constraintTop_toBottomOf="@id/stats">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="16dp">
+
+                <TextView
+                    android:id="@+id/title_body_temperature"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:text="Body Temperature (°C)"
+                    android:textColor="@color/text"
+                    android:textSize="18sp"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/body_temperature_chevron"
+                    android:layout_width="24dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:rotation="180"
+                    android:src="@drawable/expand"
+                    android:tint="@color/colorAccent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/input_body_temperature_parent"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_margin="16dp"
+                    app:layout_constraintTop_toBottomOf="@id/title_body_temperature">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/input_body_temperature"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="top"
+                        android:hint="Today"
+                        android:inputType="numberDecimal"
+                        android:paddingStart="16dp" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <net.cachapa.expandablelayout.ExpandableLayout
+                    android:id="@+id/expandable_layout_body_temperature"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    app:el_duration="1000"
+                    app:el_expanded="false"
+                    app:el_parallax="0.5"
+                    app:layout_constraintTop_toBottomOf="@id/input_body_temperature_parent">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recycler_view_body"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                </net.cachapa.expandablelayout.ExpandableLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card_weight"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:foreground="?selectableItemBackground"
+            app:layout_constraintTop_toBottomOf="@id/card_body_temperature">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="16dp">
+
+                <TextView
+                    android:id="@+id/title_weight"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:text="Weight (kg)"
+                    android:textColor="@color/text"
+                    android:textSize="18sp"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/weight_chevron"
+                    android:layout_width="24dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:rotation="180"
+                    android:src="@drawable/expand"
+                    android:tint="@color/colorAccent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/input_weight_parent"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_margin="16dp"
+                    app:layout_constraintTop_toBottomOf="@id/title_weight">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/input_weight"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="top"
+                        android:hint="Today"
+                        android:inputType="numberDecimal"
+                        android:paddingStart="16dp" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <net.cachapa.expandablelayout.ExpandableLayout
+                    android:id="@+id/expandable_layout_weight"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    app:el_duration="1000"
+                    app:el_expanded="false"
+                    app:el_parallax="0.5"
+                    app:layout_constraintTop_toBottomOf="@id/input_weight_parent">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recycler_view_weight"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                </net.cachapa.expandablelayout.ExpandableLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card_blood"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:foreground="?selectableItemBackground"
+            app:layout_constraintTop_toBottomOf="@id/card_weight">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="16dp">
+
+                <TextView
+                    android:id="@+id/title_blood"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:text="Blood Pressure"
+                    android:textColor="@color/text"
+                    android:textSize="18sp"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/blood_chevron"
+                    android:layout_width="24dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:rotation="180"
+                    android:src="@drawable/expand"
+                    android:tint="@color/colorAccent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/input_blood_parent"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_margin="16dp"
+                    app:layout_constraintTop_toBottomOf="@id/title_blood">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/input_blood"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="top"
+                        android:hint="Today"
+                        android:paddingStart="16dp" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <net.cachapa.expandablelayout.ExpandableLayout
+                    android:id="@+id/expandable_layout_blood"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    app:el_duration="1000"
+                    app:el_expanded="false"
+                    app:el_parallax="0.5"
+                    app:layout_constraintTop_toBottomOf="@id/input_blood_parent">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recycler_view_blood"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                </net.cachapa.expandablelayout.ExpandableLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.cardview.widget.CardView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.core.widget.NestedScrollView>

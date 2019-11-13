@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">LoraApp</string>
+    <string name="status_disabled">Disabled</string>
+    <string name="write_a_message">Write a message</string>
+    <string name="Priority">Prio</string>
+    <string name="send">Send</string>
+    <string name="received_messages">Received messages</string>
+</resources>
