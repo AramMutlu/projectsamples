@@ -1,0 +1,10 @@
+int a = 1 + 2;
+boolean b = true;
+
+if(a < 5){
+    print a;
+} else {
+    print b;
+}
+
+
